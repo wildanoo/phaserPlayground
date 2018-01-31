@@ -1,14 +1,32 @@
-var demo = {};
+var demo = {}, centerX = 1500 / 2, centerY = 1000 / 2, barbarian, speed = 4;
 demo.state0 = function () { };
 demo.state0.prototype = {
-    preload: function () { },
+    preload: function () {
+        game.load.image('barbarian','assets/sprites/barbarian-big.png');
+    },
     create: function () {
         game.stage.backgroundColor = "#80ff80";
         console.log('state0');
         addChangeEventListener();
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+        barbarian = game.add.sprite(centerX, centerY, 'barbarian');
+        barbarian.anchor.setTo(0.5, 0.5);
     },
-    update: function () { }
+    update: function () {
+        if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
+            barbarian.x += speed;
+        }
+        else if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
+            barbarian.x -= speed;
+        }
+        if(game.input.keyboard.isDown(Phaser.Keyboard.UP)){
+            barbarian.y -= speed;
+        }
+        else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
+            barbarian.y += speed;
+        }
+    }
 };
 
 function changeState(i, stateNum) {
