@@ -9,7 +9,7 @@ demo.state0.prototype = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         game.stage.backgroundColor = "#80ff80";
-        console.log('state0');
+        
         addChangeEventListener();
         game.world.setBounds(0,0,1920,1080);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -45,17 +45,20 @@ demo.state0.prototype = {
             if(barbarian.y < 805){
                 barbarian.y = 805;
             }
+            
         }
         else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
             barbarian.y += speed;
             if(barbarian.y > 925){
                 barbarian.y = 925;
             }
+            
         }
     }
 };
 
 function changeState(i, stateNum) {
+    console.log('state'+ stateNum);
     game.state.start('state' + stateNum);
 }
 
