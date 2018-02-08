@@ -1,23 +1,16 @@
-var ref, rootRef, hsText = [], hs = [10,9,8,7,6,5,4,3,2,1];
+var fbObj, ref, hsText = [], hs = [];
 
 demo.state9 = function() {};
 demo.state9.prototype = {
-    preload: function(){},
+    preload: function(){
+    	game.load.image('button1', 'assets/sprites/button-1.png');
+    	game.load.image('button2', 'assets/sprites/button-2.png');
+    },
     create: function(){
         game.stage.backgroundColor = "#cc9900";
         addChangeEventListener();
 
-        ref = {
-            apiKey: "AIzaSyBhgtWXDbuFmOoIab3RUH8lo3izxdyvUTA",
-            authDomain: "phaserplayground.firebaseapp.com",
-            databaseURL: "https://phaserplayground.firebaseio.com",
-            projectId: "phaserplayground",
-            storageBucket: "phaserplayground.appspot.com",
-            messagingSenderId: "927124400808"
-          };
-        firebase.initializeApp(ref);
-
-        rootRef = firebase.database().ref();
+        ref = firebase.database().ref();
 
         for (var i = 1; i < 11; i++){
             game.add.text(500, 20 + (i * 90), i + '. ', {fontSize: '40px'}).anchor.setTo(1,0);
@@ -28,9 +21,23 @@ demo.state9.prototype = {
         }
 
         var updateHStext = this.updateHStext;
-        rootRef.on('value', function(snapshot){
+        ref.on('value', function(snapshot){
             console.log(this);
-            updateHStext(snapshot.val().hs);
+            fbObj = snapshot.val();
+            updateHStext(fbObj.hs);
+        });
+
+        game.add.button(800,400,'button1',function(){
+        	var score = Math.round(Math.random() * 100);
+        	fbObj.hs.push(score);
+        	fbObj.hs = fbObj.hs.sort(function(a,b){
+        		return b - a;
+        	}).slice(0,10);
+        	ref.set(fbObj);
+        	console.log(score);
+        });
+        game.add.button(800,500,'button2',function(){
+        	ref.set({hs: [0,0,0,0,0,0,0,0,0,0]});
         });
     },
     updateHStext: function(hs){
